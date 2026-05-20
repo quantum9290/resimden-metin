@@ -35,7 +35,7 @@ Resimlerdeki (PNG, JPG) metinleri tarayıcıda, sunucuya hiçbir şey göndermed
 1. [nodejs.org](https://nodejs.org) adresine gidin.
 2. Yeşil **LTS** butonuna tıklayıp kurulum dosyasını indirin.
 3. İndirilen dosyayı çalıştırın ve kurulum sihirbazını takip edin (tüm seçenekleri varsayılan bırakın).
-4. Kurulumu doğrulamak için terminal/komut istemi açın ve şunu yazın:
+4. Kurulumu doğrulamak için `Win + R` → `cmd` yazıp Enter'a basın, ardından şunu yazın:
 
 ```
 node --version
@@ -43,11 +43,6 @@ npm --version
 ```
 
 Her ikisi de sürüm numarası gösteriyorsa kurulum tamamdır.
-
-**Terminal nasıl açılır?**
-- **Windows:** `Win + R` → `cmd` yazıp Enter
-- **macOS:** `Cmd + Space` → `Terminal` yazıp Enter
-- **Linux:** `Ctrl + Alt + T`
 
 ---
 
@@ -58,51 +53,45 @@ Her ikisi de sürüm numarası gösteriyorsa kurulum tamamdır.
 **Git kullanıyorsanız:**
 
 ```bash
-git clone https://github.com/kullanici-adi/png-to-text.git
-cd png-to-text
+git clone https://github.com/kullanici-adi/resim-den-metin.git
+cd resim-den-metin
 ```
 
 **Git yoksa:** Sağ üstteki yeşil **Code** butonuna tıklayıp **Download ZIP** seçin, ardından ZIP'i çıkartın.
-
-### 2. Bağımlılıkları yükleyin
-
-Proje klasörüne terminal açın ve şunu çalıştırın:
-
-```bash
-npm install
-```
-
-Bu komut `node_modules/` klasörünü oluşturur ve gerekli paketleri indirir. Sadece bir kez yapılır.
-
-**Proje klasöründe terminal nasıl açılır?**
-- **Windows:** Klasörü açın → adres çubuğuna `cmd` yazıp Enter
-- **macOS / Linux:** Klasöre sağ tıklayın → "Terminalde Aç"
 
 ---
 
 ## Çalıştırma
 
+### Windows — Önerilen Yöntem
+
+Proje klasöründeki **`baslat.bat`** dosyasına çift tıklayın.
+
+`baslat.bat` otomatik olarak şunları yapar:
+- Node.js kurulu değilse uyarı verir
+- Port 5173 doluysa eski sunucuyu kapatır
+- İlk çalıştırmada `npm install` ile bağımlılıkları kurar
+- Sunucuyu arka planda başlatır
+- Tarayıcıyı otomatik açar (`http://127.0.0.1:5173`)
+- Tarayıcı sekmesini kapattığınızda sunucuyu otomatik durdurur
+
+### macOS / Linux — Terminal ile
+
 ```bash
+# 1. Bağımlılıkları yükle (yalnızca ilk seferde)
+npm install
+
+# 2. Geliştirme sunucusunu başlat
 npm run dev
 ```
 
-Terminalde şuna benzer bir çıktı görünecek:
-
-```
-  VITE v8.x.x  ready in xxx ms
-
-  ➜  Local:   http://localhost:5173/
-```
-
-Tarayıcınızda **http://localhost:5173** adresini açın — uygulama hazır.
-
-> Sunucuyu durdurmak için terminalde `Ctrl + C` tuşlarına basın.
+Tarayıcıda `http://localhost:5173` adresini açın. Sunucuyu durdurmak için terminalde `Ctrl + C` tuşlarına basın.
 
 ---
 
 ## Kullanım
 
-1. PNG veya JPG dosyalarını büyük alanın üzerine sürükleyin ya da alana tıklayarak seçin.
+1. PNG veya JPG dosyalarını büyük alana sürükleyin ya da alana tıklayarak seçin.
 2. **Dil seçeneklerini** ayarlayın (Türkçe / İngilizce / ikisi birden).
 3. Sınav kağıdı veya form belgesi işliyorsanız **Gelişmiş Form/Test Temizleyici** kutucuğunu işaretleyin.
 4. **Çeviriyi Başlat** butonuna tıklayın.
@@ -135,7 +124,8 @@ npm run preview
 | Sorun | Çözüm |
 |-------|-------|
 | `npm: command not found` | Node.js kurulmamış. [nodejs.org](https://nodejs.org) adresinden LTS sürümünü yükleyin. |
-| Port 5173 zaten kullanımda | `vite.config.js` dosyasına `server: { port: 3000 }` ekleyip farklı bir port belirleyin. |
+| `baslat.bat` açılıp kapanıyor | Sağ tıklayıp "Yönetici olarak çalıştır" deneyin. |
+| Port 5173 zaten kullanımda | `baslat.bat` bunu otomatik çözer. Terminal kullanıyorsanız `vite.config.js` içine `server: { port: 3000 }` ekleyin. |
 | OCR sonucu boş çıkıyor | Görüntünün yeterli çözünürlükte olduğundan emin olun. Çok bulanık görsellerde başarı düşer. |
 | Dil dosyaları indirilemiyor | İnternet bağlantınızı kontrol edin. Kurumsal ağlardaki proxy, CDN bağlantısını engelliyor olabilir. |
 | `npm install` hata veriyor | Node.js sürümünüzün 18+ olduğunu `node --version` ile doğrulayın. |
@@ -145,20 +135,24 @@ npm run preview
 ## Proje Yapısı
 
 ```
-png-to-text/
+resim-den-metin/
 ├── public/
-│   └── favicon.svg
+│   ├── favicon.svg
+│   └── icons.svg
 ├── src/
-│   ├── assets/          # Görseller
+│   ├── assets/
+│   │   └── hero.png
 │   ├── App.jsx          # Ana bileşen — OCR mantığının tamamı burada
 │   ├── App.css          # Bileşen stilleri
 │   ├── index.css        # Global stiller ve CSS değişkenleri
 │   ├── modal.css        # Görüntü önizleme modal stilleri
 │   └── main.jsx         # React giriş noktası
+├── baslat.bat           # Windows için tek tıkla başlatıcı
+├── index.html
 ├── vite.config.js
 ├── eslint.config.js
 ├── package.json
-└── README.md
+└── package-lock.json
 ```
 
 ---
